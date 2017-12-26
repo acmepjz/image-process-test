@@ -41,30 +41,75 @@
  *    were made using index = 1.
  */
 
-#include "allheaders.h"
+#include <allheaders.h>
+
+#include <stdio.h>
+#include <string.h>
+
+void usage() {
+	printf("Usage: dwagen <type> <index> <inputfile> <outputfile>\n"
+		"  type: 'morph' or 'hmt'\n"
+		"  index: an integer\n"
+		"  inputfile: a text file containing SELs\n"
+		"  outputfile: the name of output file\n\n"
+		"Each SEL in the input file is formatted as follows:\n"
+		"  * Any number of comment lines starting with '#' are ignored\n"
+		"  * The next line contains the selname\n"
+		"  * The next lines contain the Sel data with each line beginning and\n"
+		"    ending with a double-quote, and showing the 2D layout.\n"
+		"     (1) The text is an array of chars (in row-major order) where\n"
+		"         each char can be one of the following:\n"
+		"            'x': hit\n"
+		"            'o': miss\n"
+		"            ' ': don't-care\n"
+		"     (2) When the origin falls on a hit or miss, use an upper case\n"
+		"         char (e.g., 'X' or 'O') to indicate it.  When the origin\n"
+		"         falls on a don't-care, indicate this with a 'C'.\n"
+		"  * Each Sel ends when a blank line, a comment line, or the end of file\n\n"
+		"The program will generate two files:\n"
+		"  <outputfile>.<index>.c\n"
+		"  <outputfile>low.<index>.c\n");
+	exit(1);
+}
 
 int main(int    argc,
          char **argv)
 {
-char        *filename;
-l_int32      index;
-SELA        *sela;
-static char  mainName[] = "fmorphautogen";
+	int type;
+	char        *inputfile, *filename;
+	l_int32      index;
+	SELA        *sela;
 
-    if (argc != 2 && argc != 3)
-        return ERROR_INT(" Syntax:  fmorphautogen index <filename>",
-                         mainName, 1);
+	if (argc != 5) usage();
 
-    index = atoi(argv[1]);
-    filename = NULL;
-    if (argc == 3)
-        filename = argv[2];
+	if (strcmp(argv[1], "morph") == 0) type = 0;
+	else if (strcmp(argv[1], "hmt") == 0) type = 1;
+	else usage();
 
-    sela = selaAddBasic(NULL);
-    if (fmorphautogen(sela, index, filename))
-        return 1;
+	index = atoi(argv[2]);
+	inputfile = argv[3];
+    filename = argv[4];
+
+	sela = selaCreateFromFile(inputfile);
+	if (sela == NULL) {
+		printf("Error: failed to load input file '%s'\n", inputfile);
+		return 1;
+	}
+
+	int ret = 0;
+
+	if (type == 0) {
+		ret = fmorphautogen(sela, index, filename);
+	} else {
+		ret = fhmtautogen(sela, index, filename);
+	}
 
     selaDestroy(&sela);
-    return 0;
+
+	if (ret) {
+		printf("Error: failed to generate output file '%s'\n", filename);
+	}
+
+	return ret;
 }
 
