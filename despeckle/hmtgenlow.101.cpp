@@ -39,6 +39,16 @@
 static void  fhmt_101_0(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
 static void  fhmt_101_1(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
 static void  fhmt_101_2(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_3(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_4(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_5(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_6(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_7(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_8(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_9(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_10(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_11(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
+static void  fhmt_101_12(l_uint32 *, l_int32, l_int32, l_int32, l_uint32 *, l_int32);
 
 
 /*---------------------------------------------------------------------*
@@ -69,6 +79,36 @@ fhmtgen_low_101(l_uint32  *datad,
         break;
     case 2:
         fhmt_101_2(datad, w, h, wpld, datas, wpls);
+        break;
+    case 3:
+        fhmt_101_3(datad, w, h, wpld, datas, wpls);
+        break;
+    case 4:
+        fhmt_101_4(datad, w, h, wpld, datas, wpls);
+        break;
+    case 5:
+        fhmt_101_5(datad, w, h, wpld, datas, wpls);
+        break;
+    case 6:
+        fhmt_101_6(datad, w, h, wpld, datas, wpls);
+        break;
+    case 7:
+        fhmt_101_7(datad, w, h, wpld, datas, wpls);
+        break;
+    case 8:
+        fhmt_101_8(datad, w, h, wpld, datas, wpls);
+        break;
+    case 9:
+        fhmt_101_9(datad, w, h, wpld, datas, wpls);
+        break;
+    case 10:
+        fhmt_101_10(datad, w, h, wpld, datas, wpls);
+        break;
+    case 11:
+        fhmt_101_11(datad, w, h, wpld, datas, wpls);
+        break;
+    case 12:
+        fhmt_101_12(datad, w, h, wpld, datas, wpls);
         break;
     }
 
@@ -105,15 +145,15 @@ register l_uint32  *sptr, *dptr;
         sptr = datas + i * wpls;
         dptr = datad + i * wpld;
         for (j = 0; j < pwpls; j++, sptr++, dptr++) {
-            *dptr = ((*(sptr - wpls) >> 1) | (*(sptr - wpls - 1) << 31)) &
-                    (*(sptr - wpls)) &
-                    ((*(sptr - wpls) << 1) | (*(sptr - wpls + 1) >> 31)) &
-                    ((*(sptr) >> 1) | (*(sptr - 1) << 31)) &
-                    (~*sptr) &
-                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
-                    ((*(sptr + wpls) >> 1) | (*(sptr + wpls - 1) << 31)) &
-                    (*(sptr + wpls)) &
-                    ((*(sptr + wpls) << 1) | (*(sptr + wpls + 1) >> 31));
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31));
         }
     }
 }
@@ -174,6 +214,40 @@ fhmt_101_2(l_uint32  *datad,
 l_int32             i;
 register l_int32    j, pwpls;
 register l_uint32  *sptr, *dptr;
+
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr - wpls) << 2) | (~*(sptr - wpls + 1) >> 30)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls) << 2) | (~*(sptr + wpls + 1) >> 30));
+        }
+    }
+}
+
+static void
+fhmt_101_3(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
 l_int32             wpls2;
 
     wpls2 = 2 * wpls;
@@ -183,27 +257,362 @@ l_int32             wpls2;
         sptr = datas + i * wpls;
         dptr = datad + i * wpld;
         for (j = 0; j < pwpls; j++, sptr++, dptr++) {
-            *dptr = ((*(sptr - wpls2) >> 1) | (*(sptr - wpls2 - 1) << 31)) &
-                    (*(sptr - wpls2)) &
-                    ((*(sptr - wpls2) << 1) | (*(sptr - wpls2 + 1) >> 31)) &
-                    ((*(sptr - wpls) >> 2) | (*(sptr - wpls - 1) << 30)) &
-                    ((*(sptr - wpls) >> 1) | (*(sptr - wpls - 1) << 31)) &
-                    (*(sptr - wpls)) &
-                    ((*(sptr - wpls) << 1) | (*(sptr - wpls + 1) >> 31)) &
-                    ((*(sptr - wpls) << 2) | (*(sptr - wpls + 1) >> 30)) &
-                    ((*(sptr) >> 2) | (*(sptr - 1) << 30)) &
-                    ((*(sptr) >> 1) | (*(sptr - 1) << 31)) &
-                    (~*sptr) &
-                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
-                    ((*(sptr) << 2) | (*(sptr + 1) >> 30)) &
-                    ((*(sptr + wpls) >> 2) | (*(sptr + wpls - 1) << 30)) &
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31));
+        }
+    }
+}
+
+static void
+fhmt_101_4(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((*(sptr + wpls) << 1) | (*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls) << 2) | (~*(sptr + wpls + 1) >> 30)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31)) &
+                    ((~*(sptr + wpls2) << 2) | (~*(sptr + wpls2 + 1) >> 30));
+        }
+    }
+}
+
+static void
+fhmt_101_5(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 2) | (~*(sptr - 1) << 30)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 2) | (~*(sptr + wpls - 1) << 30)) &
                     ((*(sptr + wpls) >> 1) | (*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls2) >> 2) | (~*(sptr + wpls2 - 1) << 30)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2));
+        }
+    }
+}
+
+static void
+fhmt_101_6(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 2) | (~*(sptr - wpls - 1) << 30)) &
+                    ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr - wpls) << 2) | (~*(sptr - wpls + 1) >> 30)) &
+                    ((~*(sptr) >> 2) | (~*(sptr - 1) << 30)) &
+                    ((*(sptr) >> 1) | (*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 2) | (~*(sptr + wpls - 1) << 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls) << 2) | (~*(sptr + wpls + 1) >> 30));
+        }
+    }
+}
+
+static void
+fhmt_101_7(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls2) >> 1) | (~*(sptr - wpls2 - 1) << 31)) &
+                    (~*(sptr - wpls2)) &
+                    ((~*(sptr - wpls2) << 1) | (~*(sptr - wpls2 + 1) >> 31)) &
+                    ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31));
+        }
+    }
+}
+
+static void
+fhmt_101_8(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr - wpls) << 2) | (~*(sptr - wpls + 1) >> 30)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31));
+        }
+    }
+}
+
+static void
+fhmt_101_9(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 2) | (~*(sptr - wpls - 1) << 30)) &
+                    ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 2) | (~*(sptr - 1) << 30)) &
+                    ((*(sptr) >> 1) | (*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31));
+        }
+    }
+}
+
+static void
+fhmt_101_10(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls2) >> 1) | (~*(sptr - wpls2 - 1) << 31)) &
+                    (~*(sptr - wpls2)) &
+                    ((~*(sptr - wpls2) << 1) | (~*(sptr - wpls2 + 1) >> 31)) &
+                    ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31)) &
+                    ((~*(sptr + wpls) << 2) | (~*(sptr + wpls + 1) >> 30));
+        }
+    }
+}
+
+static void
+fhmt_101_11(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls2) >> 1) | (~*(sptr - wpls2 - 1) << 31)) &
+                    (~*(sptr - wpls2)) &
+                    ((~*(sptr - wpls2) << 1) | (~*(sptr - wpls2 + 1) >> 31)) &
+                    ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr) >> 2) | (~*(sptr - 1) << 30)) &
+                    ((*(sptr) >> 1) | (*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((~*(sptr) << 1) | (~*(sptr + 1) >> 31)) &
+                    ((~*(sptr + wpls) >> 2) | (~*(sptr + wpls - 1) << 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
+                    (~*(sptr + wpls)) &
+                    ((~*(sptr + wpls) << 1) | (~*(sptr + wpls + 1) >> 31));
+        }
+    }
+}
+
+static void
+fhmt_101_12(l_uint32  *datad,
+         l_int32    w,
+         l_int32    h,
+         l_int32    wpld,
+         l_uint32  *datas,
+         l_int32    wpls)
+{
+l_int32             i;
+register l_int32    j, pwpls;
+register l_uint32  *sptr, *dptr;
+l_int32             wpls2;
+
+    wpls2 = 2 * wpls;
+    pwpls = (l_uint32)(w + 31) / 32;  /* proper wpl of src */
+
+    for (i = 0; i < h; i++) {
+        sptr = datas + i * wpls;
+        dptr = datad + i * wpld;
+        for (j = 0; j < pwpls; j++, sptr++, dptr++) {
+            *dptr = ((~*(sptr - wpls) >> 1) | (~*(sptr - wpls - 1) << 31)) &
+                    (~*(sptr - wpls)) &
+                    ((~*(sptr - wpls) << 1) | (~*(sptr - wpls + 1) >> 31)) &
+                    ((~*(sptr - wpls) << 2) | (~*(sptr - wpls + 1) >> 30)) &
+                    ((~*(sptr) >> 1) | (~*(sptr - 1) << 31)) &
+                    (*sptr) &
+                    ((*(sptr) << 1) | (*(sptr + 1) >> 31)) &
+                    ((~*(sptr) << 2) | (~*(sptr + 1) >> 30)) &
+                    ((~*(sptr + wpls) >> 1) | (~*(sptr + wpls - 1) << 31)) &
                     (*(sptr + wpls)) &
                     ((*(sptr + wpls) << 1) | (*(sptr + wpls + 1) >> 31)) &
-                    ((*(sptr + wpls) << 2) | (*(sptr + wpls + 1) >> 30)) &
-                    ((*(sptr + wpls2) >> 1) | (*(sptr + wpls2 - 1) << 31)) &
-                    (*(sptr + wpls2)) &
-                    ((*(sptr + wpls2) << 1) | (*(sptr + wpls2 + 1) >> 31));
+                    ((~*(sptr + wpls) << 2) | (~*(sptr + wpls + 1) >> 30)) &
+                    ((~*(sptr + wpls2) >> 1) | (~*(sptr + wpls2 - 1) << 31)) &
+                    (~*(sptr + wpls2)) &
+                    ((~*(sptr + wpls2) << 1) | (~*(sptr + wpls2 + 1) >> 31)) &
+                    ((~*(sptr + wpls2) << 2) | (~*(sptr + wpls2 + 1) >> 30));
         }
     }
 }

@@ -41,11 +41,21 @@ l_int32 fhmtgen_low_101(l_uint32 *datad, l_int32 w,
                       l_uint32 *datas, l_int32 wpls,
                       l_int32 index);
 
-static l_int32   NUM_SELS_GENERATED = 3;
+static l_int32   NUM_SELS_GENERATED = 13;
 static char  SEL_NAMES[][80] = {
-                             "sel_3hm2",
-                             "sel_5hm",
-                             "sel_5hm2"};
+                             "3hm",
+                             "5hm",
+                             "3hm2_h",
+                             "3hm2_v",
+                             "3hm2_d1",
+                             "3hm2_d2",
+                             "3hm3_h",
+                             "3hm3_v",
+                             "3hm3_c1",
+                             "3hm3_c2",
+                             "3hm3_c3",
+                             "3hm3_c4",
+                             "3hm4_c"};
 
 /*!
  *  pixHMTDwa_101()

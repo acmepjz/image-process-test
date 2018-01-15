@@ -1,20 +1,76 @@
-# There is already a predefined "sel_3hm" in Leptonica
-# detecting isolated foreground pixel
-sel_3hm2
-"xxx"
-"xOx"
-"xxx"
+3hm
+"ooo"
+"oXo"
+"ooo"
 
-sel_5hm
+5hm
 " ooo "
 "ooooo"
 "ooXoo"
 "ooooo"
 " ooo "
 
-sel_5hm2
-" xxx "
-"xxxxx"
-"xxOxx"
-"xxxxx"
-" xxx "
+3hm2_h
+"oooo"
+"oXxo"
+"oooo"
+
+3hm2_v
+"ooo"
+"oXo"
+"oxo"
+"ooo"
+
+3hm2_d1
+"ooo "
+"oXoo"
+"ooxo"
+" ooo"
+
+3hm2_d2
+" ooo"
+"ooXo"
+"oxoo"
+"ooo "
+
+3hm3_h
+"ooooo"
+"oxXxo"
+"ooooo"
+
+3hm3_v
+"ooo"
+"oxo"
+"oXo"
+"oxo"
+"ooo"
+
+3hm3_c1
+"oooo"
+"oXxo"
+"oxo "
+"ooo "
+
+3hm3_c2
+"oooo"
+"oxXo"
+" oxo"
+" ooo"
+
+3hm3_c3
+"ooo "
+"oxo "
+"oXxo"
+"oooo"
+
+3hm3_c4
+" ooo"
+" oxo"
+"oxXo"
+"oooo"
+
+3hm4_c
+"oooo"
+"oXxo"
+"oxxo"
+"oooo"
