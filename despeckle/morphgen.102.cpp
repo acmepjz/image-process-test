@@ -27,30 +27,36 @@
 /*!
  *      Top-level fast binary morphology with auto-generated sels
  *
---- *            PIX      *pixMorphDwa_*()
---- *            PIX      *pixFMorphopGen_*()
+ *             PIX     *pixMorphDwa_102()
+ *             PIX     *pixFMorphopGen_102()
  */
 
 #include <string.h>
 #include "allheaders.h"
 
----              This file is:  morphtemplate1.txt
----
----           We need to include these prototypes:
----    PIX *pixMorphDwa_*(PIX *pixd, PIX *pixs, l_int32 operation,
----                        const char *selname);
----    PIX *pixFMorphopGen_*(PIX *pixd, PIX *pixs, l_int32 operation,
----                          const char *selname);
----    l_int32 fmorphopgen_low_*(l_uint32 *datad, l_int32 w, l_int32 h,
----                              l_int32 wpld, l_uint32 *datas,
----                              l_int32  wpls, l_int32 index);
----
----           We need to input two static globals here:
----    static l_int32     NUM_SELS_GENERATED =  <some number>;
----    static char  SEL_NAMES[][80] =    {"<string1>", "<string2>", ...};
+PIX *pixMorphDwa_102(PIX *pixd, PIX *pixs, l_int32 operation, const char *selname);
+PIX *pixFMorphopGen_102(PIX *pixd, PIX *pixs, l_int32 operation, const char *selname);
+l_int32 fmorphopgen_low_102(l_uint32 *datad, l_int32 w,
+                          l_int32 h, l_int32 wpld,
+                          l_uint32 *datas, l_int32 wpls,
+                          l_int32 index);
+
+static l_int32   NUM_SELS_GENERATED = 11;
+static char  SEL_NAMES[][80] = {
+                             "morph2_h",
+                             "morph2_v",
+                             "morph2_d1",
+                             "morph2_d2",
+                             "morph3_h",
+                             "morph3_v",
+                             "morph3_c1",
+                             "morph3_c2",
+                             "morph3_c3",
+                             "morph3_c4",
+                             "morph4_c"};
 
 /*!
---- *  pixMorphDwa_*()
+ *  pixMorphDwa_102()
  *
  *      Input:  pixd (usual 3 choices: null, == pixs, != pixs)
  *              pixs (1 bpp)
@@ -67,7 +73,7 @@
  *          and the boundary conditions.
  */
 PIX *
----    pixMorphDwa_*(PIX     *pixd,
+pixMorphDwa_102(PIX     *pixd,
               PIX     *pixs,
               l_int32  operation,
               const char    *selname)
@@ -75,7 +81,7 @@ PIX *
 l_int32  bordercolor, bordersize;
 PIX     *pixt1, *pixt2, *pixt3;
 
---- PROCNAME("pixMorpDwa_*");
+    PROCNAME("pixMorphDwa_102");
 
     if (!pixs)
         return (PIX *)ERROR_PTR("pixs not defined", procName, pixd);
@@ -89,7 +95,7 @@ PIX     *pixt1, *pixt2, *pixt3;
         bordersize += 32;
 
     pixt1 = pixAddBorder(pixs, bordersize, 0);
---- pixt2 = pixFMorphopGen_*(NULL, pixt1, operation, selname);
+    pixt2 = pixFMorphopGen_102(NULL, pixt1, operation, selname);
     pixt3 = pixRemoveBorder(pixt2, bordersize);
     pixDestroy(&pixt1);
     pixDestroy(&pixt2);
@@ -104,7 +110,7 @@ PIX     *pixt1, *pixt2, *pixt3;
 
 
 /*!
---- *  pixFMorphopGen_*()
+ *  pixFMorphopGen_102()
  *
  *      Input:  pixd (usual 3 choices: null, == pixs, != pixs)
  *              pixs (1 bpp)
@@ -125,7 +131,7 @@ PIX     *pixt1, *pixt2, *pixt3;
  *          near the boundary.
  */
 PIX *
----      pixFMorphopGen_*(PIX     *pixd,
+pixFMorphopGen_102(PIX     *pixd,
                  PIX     *pixs,
                  l_int32  operation,
                  const char    *selname)
@@ -134,7 +140,7 @@ l_int32    i, index, found, w, h, wpls, wpld, bordercolor, erodeop, borderop;
 l_uint32  *datad, *datas, *datat;
 PIX       *pixt;
 
---- PROCNAME("pixFMorphopGen_*");
+    PROCNAME("pixFMorphopGen_102");
 
     if (!pixs)
         return (PIX *)ERROR_PTR("pixs not defined", procName, pixd);
@@ -188,12 +194,12 @@ PIX       *pixt;
                 return (PIX *)ERROR_PTR("pixt not made", procName, pixd);
             datat = pixGetData(pixt) + 32 * wpls + 1;
             pixSetOrClearBorder(pixt, 32, 32, 32, 32, borderop);
----         fmorphopgen_low_*(datad, w, h, wpld, datat, wpls, index);
+            fmorphopgen_low_102(datad, w, h, wpld, datat, wpls, index);
             pixDestroy(&pixt);
         }
         else { /* not in-place */
             pixSetOrClearBorder(pixs, 32, 32, 32, 32, borderop);
----         fmorphopgen_low_*(datad, w, h, wpld, datas, wpls, index);
+            fmorphopgen_low_102(datad, w, h, wpld, datas, wpls, index);
         }
     }
     else {  /* opening or closing; generate a temp image */
@@ -202,15 +208,15 @@ PIX       *pixt;
         datat = pixGetData(pixt) + 32 * wpls + 1;
         if (operation == L_MORPH_OPEN) {
             pixSetOrClearBorder(pixs, 32, 32, 32, 32, erodeop);
----         fmorphopgen_low_*(datat, w, h, wpls, datas, wpls, index + 1);
+            fmorphopgen_low_102(datat, w, h, wpls, datas, wpls, index+1);
             pixSetOrClearBorder(pixt, 32, 32, 32, 32, PIX_CLR);
----         fmorphopgen_low_*(datad, w, h, wpld, datat, wpls, index);
+            fmorphopgen_low_102(datad, w, h, wpld, datat, wpls, index);
         }
         else {  /* closing */
             pixSetOrClearBorder(pixs, 32, 32, 32, 32, PIX_CLR);
----         fmorphopgen_low_*(datat, w, h, wpls, datas, wpls, index);
+            fmorphopgen_low_102(datat, w, h, wpls, datas, wpls, index);
             pixSetOrClearBorder(pixt, 32, 32, 32, 32, erodeop);
----         fmorphopgen_low_*(datad, w, h, wpld, datat, wpls, index + 1);
+            fmorphopgen_low_102(datad, w, h, wpld, datat, wpls, index+1);
         }
         pixDestroy(&pixt);
     }

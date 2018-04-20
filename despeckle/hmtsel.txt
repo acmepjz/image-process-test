@@ -1,0 +1,192 @@
+# the following are naive noise removal
+# NOTE: all matched pixels should turn white
+
+3hm
+"ooo"
+"oXo"
+"ooo"
+
+5hm
+" ooo "
+"ooooo"
+"ooXoo"
+"ooooo"
+" ooo "
+
+3hm2_h
+"oooo"
+"oXxo"
+"oooo"
+
+3hm2_v
+"ooo"
+"oXo"
+"oxo"
+"ooo"
+
+3hm2_d1
+"ooo "
+"oXoo"
+"ooxo"
+" ooo"
+
+3hm2_d2
+" ooo"
+"ooXo"
+"oxoo"
+"ooo "
+
+3hm3_h
+"ooooo"
+"oxXxo"
+"ooooo"
+
+3hm3_v
+"ooo"
+"oxo"
+"oXo"
+"oxo"
+"ooo"
+
+3hm3_c1
+"oooo"
+"oXxo"
+"oxo "
+"ooo "
+
+3hm3_c2
+"oooo"
+"oxXo"
+" oxo"
+" ooo"
+
+3hm3_c3
+"ooo "
+"oxo "
+"oXxo"
+"oooo"
+
+3hm3_c4
+" ooo"
+" oxo"
+"oxXo"
+"oooo"
+
+3hm4_c
+"oooo"
+"oXxo"
+"oxxo"
+"oooo"
+
+# the following are morphological smooth slightly modified from Scan Tailor
+# NOTE: all matched pixels should turn white
+
+st_av1
+"xoo"
+"xCo"
+"xoo"
+
+st_ah1
+"xxx"
+"oCo"
+"ooo"
+
+st_av2
+"oox"
+"oCx"
+"oox"
+
+st_ah2
+"ooo"
+"oCo"
+"xxx"
+
+st_bv1
+"xo "
+"xoo"
+"xCo"
+"xoo"
+"xo "
+
+st_bh1
+"xxxxx"
+"ooCoo"
+" ooo "
+
+st_bv2
+" ox"
+"oox"
+"oCx"
+"oox"
+" ox"
+
+st_bh2
+" ooo "
+"ooCoo"
+"xxxxx"
+
+st_cv1
+"xo "
+"xo "
+"xoo"
+"xCo"
+"x o"
+"xoo"
+"xo "
+"xo "
+
+st_ch1
+"xxxxxxxx"
+"oooC ooo"
+"  oooo  "
+
+st_cv2
+" ox"
+" ox"
+"oox"
+"oCx"
+"o x"
+"oox"
+" ox"
+" ox"
+
+st_ch2
+"  oooo  "
+"oooC ooo"
+"xxxxxxxx"
+
+st_dv1
+"xo "
+"xo "
+"xo "
+"xoo"
+"x o"
+"xCo"
+"x o"
+"xoo"
+"xo "
+"xo "
+"xo "
+
+st_dh1
+"xxxxxxxxxxx"
+"oooo C oooo"
+"   ooooo   "
+
+st_dv2
+" ox"
+" ox"
+" ox"
+"oox"
+"o x"
+"oCx"
+"o x"
+"oox"
+" ox"
+" ox"
+" ox"
+
+st_dh2
+"   ooooo   "
+"oooo C oooo"
+"xxxxxxxxxxx"

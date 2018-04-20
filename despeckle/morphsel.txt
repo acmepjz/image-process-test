@@ -1,0 +1,43 @@
+morph2_h
+"Xx"
+
+morph2_v
+"X"
+"x"
+
+morph2_d1
+"X "
+" x"
+
+morph2_d2
+" X"
+"x "
+
+morph3_h
+"xXx"
+
+morph3_v
+"x"
+"X"
+"x"
+
+morph3_c1
+"Xx"
+"x "
+
+morph3_c2
+"xX"
+" x"
+
+morph3_c3
+"x "
+"Xx"
+
+morph3_c4
+" x"
+"xX"
+
+morph4_c
+"Xx"
+"xx"
+
