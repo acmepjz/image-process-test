@@ -2,7 +2,8 @@
 theme: jekyll-theme-cayman
 title: Hello, World!
 description: Hello world test only
-baseurl: "/blog"
+# NOTE: this should be the project name if using GitHub Pages
+baseurl: "/image-process-test"
 
 # Build settings
 markdown: kramdown
