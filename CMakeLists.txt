@@ -19,3 +19,7 @@ endif()
 if(FreeImage_FOUND AND Leptonica_FOUND)
 	add_subdirectory(despeckle)
 endif()
+
+if(FreeImage_FOUND)
+	add_subdirectory(splitpage)
+endif()

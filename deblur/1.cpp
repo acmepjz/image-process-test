@@ -64,6 +64,11 @@ static FIBITMAP* loadImage(const char* filename, int flags) {
 static void saveImage(const char* filename, FIBITMAP* bm, int flags) {
 	FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(filename);
 
+	// ad-hoc!!!
+	if (fif == FIF_JPEG && flags == 0) {
+		flags = 95;
+	}
+
 	if ((fif == FIF_UNKNOWN)
 		|| !FreeImage_FIFSupportsWriting(fif)
 		|| !FreeImage_Save(fif, bm, filename, flags)) {
@@ -427,7 +432,7 @@ void Deblur::deblur(const double *yImage, double *kImage, int width, int height,
 }
 
 void usage() {
-	printf(
+	puts(
 		"Usage: deblur [options] <input> <output>\n"
 		"Options:\n"
 		"  -k, --kernel <file>        output estimated kernel\n"
